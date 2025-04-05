@@ -88,11 +88,14 @@ docker run -d --name tftp -p 69:69/udp -v /tmp/tftp:/var/tftpboot \
 ```
 Ce conteneur lance un TFTP. Place un fichier dans /tmp/tftp/ pour y accéder via TFTP depuis ton hôte.
 
-## 📊 Synthèse comparative :
-Protocole	Sécurité	Transport	Usage typique	Authentification	Port
-FTP	❌ Aucune	TCP	Web hosting, anciens scripts	Login en clair	21 (commande), 20 (données)
-FTPS	✅ TLS	TCP	B2B sécurisé, conformité	Login + certificat SSL	21 (explicite), 990 (implicite)
-SFTP	✅ SSH	TCP	Serveur Linux, backup	Login SSH / clé	22
-TFTP	❌ Aucune	UDP	Firmware, PXE, équipements	❌ Aucun	69
+## 📊 Synthèse comparative des protocoles de transfert de fichiers
+
+| Protocole | Sécurité     | Transport | Usage typique                    | Authentification       | Port(s)                         |
+|-----------|--------------|-----------|----------------------------------|-------------------------|---------------------------------|
+| **FTP**   | ❌ Aucune     | TCP       | Web hosting, anciens scripts     | Login en clair          | 21 (commande), 20 (données)     |
+| **FTPS**  | ✅ TLS        | TCP       | B2B sécurisé, conformité         | Login + certificat SSL  | 21 (explicite), 990 (implicite) |
+| **SFTP**  | ✅ SSH        | TCP       | Serveur Linux, backup            | Login SSH / clé         | 22                              |
+| **TFTP**  | ❌ Aucune     | UDP       | Firmware, PXE, équipements       | ❌ Aucun                 | 69                              |
+
 
 
