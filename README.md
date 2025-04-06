@@ -1,13 +1,34 @@
 # 📦 Protocoles de Transfert de Fichiers : FTP, SFTP, FTPS, TFTP
 
-### 📚 Qu’est-ce qu’une RFC ?
-Les RFC (Request For Comments) sont des documents normatifs publiés par l’IETF (Internet Engineering Task Force). Ce sont des standards officiels ou historiques qui définissent les protocoles réseau, leur fonctionnement, leurs messages, leur syntaxe, etc.
+## 🧭 Table des matières
+
+- [📦 Protocoles de Transfert de Fichiers : FTP, SFTP, FTPS, TFTP](#-protocoles-de-transfert-de-fichiers--ftp-sftp-ftps-tftp)
+- [🔐 Protocoles de Communication Sécurisée : SSH, Telnet, RDP](#-protocoles-de-communication-sécurisée--ssh-telnet-rdp)
+- [📡 Protocoles de Monitoring & Supervision : SNMP, Syslog, NetFlow, sFlow](#-protocoles-de-monitoring--supervision--snmp-syslog-netflow-sflow)
+- [🧭 Protocoles de Routage : OSPF, BGP, RIP, EIGRP, IS-IS](#-protocoles-de-routage--ospf-bgp-rip-eigrp-is-is)
+- [🔒 Protocoles VPN & Tunnels : IPsec, L2TP, PPTP, GRE](#-protocoles-vpn--tunnels--ipsec-l2tp-pptp-gre)
+- [🛡️ Protocoles de Sécurité Réseau : 8021x, RADIUS, TACACS+](#-protocoles-de-sécurité-réseau--8021x-radius-tacacs)
+- [🎙️ Protocoles Voix & Communication : SIP, RTP, RTCP, H.323](#-protocoles-voix--communication--sip-rtp-rtcp-h323)
+- [📬 Protocoles de Messagerie : SMTP, POP3, IMAP](#-protocoles-de-messagerie--smtp-pop3-imap)
+- [🔎 Protocoles de Découverte & Résidentiels : mDNS, SSDP, LLDP, NetBIOS](#-protocoles-de-découverte--résidentiels--mdns-ssdp-lldp-netbios)
+- [📦 Protocoles de Transport Fondamentaux : TCP, UDP, ICMP, IGMP](#-protocoles-de-transport-fondamentaux--tcp-udp-icmp-igmp)
+
+
+### 💡 Avant de commencer, qu’est-ce qu’une RFC ?
+Les RFC (Request For Comments) sont des documents normatifs publiés par l’IETF (Internet Engineering Task Force). 
+
+Ce sont des standards officiels ou historiques qui définissent les protocoles réseau, leur fonctionnement, leurs messages, leur syntaxe, etc.
 
 ➡ Par exemple, FTP est défini dans la RFC 959, TFTP dans la RFC 1350, et SFTP est spécifié via l’extension SSH dans les drafts IETF.
 Quand je cite une RFC, cela signifie que le comportement du protocole est standardisé et reconnu officiellement.
 
 ## 🧱 FTP – File Transfer Protocol
-Le protocole FTP, défini dans la RFC 959, est l’un des plus anciens mécanismes de transfert de fichiers. Il fonctionne selon un modèle client-serveur et repose sur une architecture double canal : un canal de commande (port TCP 21) et un canal de données (port TCP 20 ou dynamique en mode passif). Cela signifie que le client envoie des commandes (comme LIST, RETR, STOR) sur un canal et reçoit ou envoie les fichiers via un second.
+
+Le protocole FTP, défini dans la RFC 959, est l’un des plus anciens mécanismes de transfert de fichiers. 
+
+Il fonctionne selon un modèle client-serveur et repose sur une architecture double canal : un canal de commande (port TCP 21) et un canal de données (port TCP 20 ou dynamique en mode passif). 
+
+Cela signifie que le client envoie des commandes (comme `LIST`, `RETR`, `STOR`) sur un canal et reçoit ou envoie les fichiers via un second.
 
 ### ⚠️ Limite majeure : les données et les identifiants transitent en clair. Cela rend FTP vulnérable à l’interception (sniffing), au spoofing, et aux attaques de type "man-in-the-middle".
 ### 🔍 Exemple : un développeur web utilisant FileZilla pour téléverser un site sur un serveur FTP hébergé.
@@ -16,7 +37,10 @@ Le protocole FTP, défini dans la RFC 959, est l’un des plus anciens mécanism
 ftp 192.168.1.100
 ```
 
-Tu tapes cette commande dans un terminal Linux. Elle ouvre une session FTP avec l’adresse IP du serveur. Ensuite, tu entreras un login et un mot de passe. Tu peux ensuite utiliser ls, get fichier.txt, put fichier.txt, etc.
+Tu tapes cette commande dans un terminal Linux. Elle ouvre une session FTP avec l’adresse IP du serveur. 
+
+Ensuite, tu entreras un login et un mot de passe. Tu peux ensuite utiliser ls, get fichier.txt, put fichier.txt, etc.
+
 ### 🛠️ Cas pratique Docker :
 ```bash 
 docker run -d --name ftp-server -p 21:21 -p 30000-30009:30000-30009 \
@@ -27,9 +51,13 @@ docker run -d --name ftp-server -p 21:21 -p 30000-30009:30000-30009 \
 Lance un serveur FTP en conteneur avec l’utilisateur test:test123. Tu peux t’y connecter avec ftp localhost.
 
 ## 🔐 FTPS – FTP Secure (avec SSL/TLS)
-Pour répondre aux faiblesses de sécurité du FTP, on a développé FTPS, qui encapsule le protocole FTP classique dans une couche SSL/TLS. Il en existe deux variantes :
-FTPS implicite : la connexion est automatiquement chiffrée dès le début (port TCP 990).
-FTPS explicite : la connexion débute en clair, puis passe au mode sécurisé avec la commande AUTH TLS (sur le port 21).
+Pour répondre aux faiblesses de sécurité du FTP, on a développé FTPS, qui encapsule le protocole FTP classique dans une couche SSL/TLS. 
+
+Il en existe deux variantes :
+
+- FTPS implicite : la connexion est automatiquement chiffrée dès le début (port TCP 990).
+
+- FTPS explicite : la connexion débute en clair, puis passe au mode sécurisé avec la commande AUTH TLS (sur le port 21).
 
 ### 🔐 Grâce à FTPS, les échanges sont protégés via certificats numériques, assurant confidentialité et authenticité.
 ### 👨‍🏫 Exemple concret : une banque échangeant des rapports de conformité via un serveur FTPS avec certificats client.
@@ -49,7 +77,11 @@ Le serveur FTPS est actif sur les ports 21 et 990. Utilise FileZilla en mode FTP
 
 ## 🛡️ SFTP – SSH File Transfer Protocol
 
-À ne pas confondre avec FTPS, le SFTP est un protocole complètement distinct, basé sur SSH (port TCP 22). Contrairement à FTP/FTPS, il ne sépare pas les commandes des données. Il encapsule tout dans un flux SSH unique, offrant à la fois authentification forte (via mot de passe ou clés publiques) et chiffrement intégral du canal de bout en bout.
+À ne pas confondre avec FTPS, le SFTP est un protocole complètement distinct, basé sur SSH (port TCP 22). 
+
+Contrairement à FTP/FTPS, il ne sépare pas les commandes des données. 
+
+Il encapsule tout dans un flux SSH unique, offrant à la fois authentification forte (via mot de passe ou clés publiques) et chiffrement intégral du canal de bout en bout.
 
 ### ⚙️ SFTP est souvent utilisé dans les systèmes Unix/Linux (OpenSSH) et offre des fonctionnalités avancées : renommage atomique, permissions Unix, reprise de transfert, etc.
 ### 🔐 Exemple : un administrateur système accédant à un serveur Linux via sftp ou un script scp automatisé de sauvegarde quotidienne.
@@ -67,7 +99,9 @@ Lance un conteneur SFTP avec le compte user:password. Tu peux t’y connecter av
 
 ## 📡 TFTP – Trivial File Transfer Protocol
 
-Le TFTP est une version simplifiée et minimale de FTP, défini dans la RFC 1350. Il fonctionne sur UDP (port 69), ce qui le rend extrêmement léger, mais sans authentification ni chiffrement. TFTP utilise une séquence très limitée de commandes (RRQ, WRQ, DATA, ACK, ERROR), rendant son usage restreint à des cas précis.
+Le TFTP est une version simplifiée et minimale de `FTP`, défini dans la RFC 1350. 
+
+Il fonctionne sur UDP (port 69), ce qui le rend extrêmement léger, mais sans authentification ni chiffrement. TFTP utilise une séquence très limitée de commandes (`RRQ`, `WRQ`, `DATA`, `ACK`, `ERROR`), rendant son usage restreint à des cas précis.
 
 ### ⚙️ Il est très utilisé dans les environnements d’infrastructure : démarrage réseau via PXE Boot, mise à jour de firmware pour switchs/routeurs, dépôts de configuration d’équipements.
 ### 🧪 Exemple : un switch Cisco qui récupère sa configuration initiale via un serveur TFTP lors du boot.
@@ -99,16 +133,21 @@ ___
 
 # 🔐 Protocoles de Communication Sécurisée : SSH, Telnet, RDP
 
-Les protocoles de communication sécurisée sont utilisés pour administrer à distance des équipements et serveurs dans des environnements réseau. Ils offrent différents niveaux de sécurité, d’interopérabilité et d’accessibilité. Les trois principaux sont :
-- SSH (Secure Shell) : standard moderne, chiffré et robuste
-- Telnet : protocole ancien, non sécurisé, encore utilisé pour certains tests
-- RDP (Remote Desktop Protocol) : accès graphique à distance, principalement pour Windows
+Les protocoles de communication sécurisée sont utilisés pour administrer à distance des équipements et serveurs dans des environnements réseau. 
+
+Ils offrent différents niveaux de sécurité, d’interopérabilité et d’accessibilité. Les trois principaux sont :
+- `SSH` (Secure Shell) : standard moderne, chiffré et robuste
+- `Telnet` : protocole ancien, non sécurisé, encore utilisé pour certains tests
+- `RDP` (Remote Desktop Protocol) : accès graphique à distance, principalement pour Windows
 
 > Ces protocoles ont été normalisés dans différentes RFC ou implémentations propriétaires, et sont essentiels à maîtriser pour tout administrateur système et réseau.
 
 ## 🛡️ SSH – Secure Shell
 
-SSH est un protocole sécurisé de communication distant, utilisé pour accéder à des serveurs de manière chiffrée (port TCP 22). Il remplace Telnet en offrant authentification par mot de passe ou clé publique, chiffrement du trafic, tunneling sécurisé, transfert de fichiers (SCP, SFTP) et redirection de ports.
+SSH est un protocole sécurisé de communication distant, utilisé pour accéder à des serveurs de manière chiffrée (port TCP 22). 
+
+Il remplace Telnet en offrant authentification par mot de passe ou clé publique, chiffrement du trafic, tunneling sécurisé, transfert de fichiers (SCP, SFTP) et redirection de ports.
+
 ### 💡 Basé sur un modèle client-serveur, SSH garantit confidentialité, intégrité et authenticité à travers des algorithmes modernes : RSA, ECDSA, Ed25519.
 ### 🔐 Exemple : un administrateur se connecte à un serveur Ubuntu pour le mettre à jour ou redémarrer un service via ssh.
 ### ✅ Commande terminal :
@@ -129,7 +168,12 @@ ssh root@localhost -p 2222
 
 ## ⚠️ Telnet – Terminal Network
 
-Telnet (port TCP 23) permet une communication texte à distance, mais sans chiffrement. Les identifiants et les commandes passent en clair, rendant Telnet dangereux en production. Toutefois, il reste utile pour tester un port ouvert ou simuler une requête.
+Telnet (port TCP 23) permet une communication texte à distance, mais sans chiffrement. 
+
+Les identifiants et les commandes passent en clair, rendant Telnet dangereux en production. 
+
+Toutefois, il reste utile pour tester un port ouvert ou simuler une requête.
+
 ### 📺 Anciennement utilisé pour l’administration réseau, aujourd’hui remplacé par SSH dans 99 % des cas.
 ### 🧪 Exemple : un admin vérifie qu’un serveur web écoute sur le port 80 :
 ```bash
@@ -152,7 +196,10 @@ telnet localhost 2323
 
 ## 🖥️ RDP – Remote Desktop Protocol
 
-RDP est un protocole propriétaire développé par Microsoft pour permettre l’accès graphique distant à un environnement Windows. Il fonctionne sur TCP 3389 et parfois en UDP également.
+RDP est un protocole propriétaire développé par Microsoft pour permettre l’accès graphique distant à un environnement Windows. 
+
+Il fonctionne sur TCP 3389 et parfois en UDP également.
+
 ### 💡 Il prend en charge :
 - Redirection de périphériques USB
 - Authentification réseau (NLA)
@@ -189,12 +236,22 @@ ___
 
 # 📡 Protocoles de Monitoring & Supervision : SNMP, Syslog, NetFlow, sFlow
 
-Un réseau bien configuré ne suffit pas. Il faut le surveiller en temps réel, détecter les anomalies, les lenteurs, les saturations… et anticiper les pannes. C’est là qu’interviennent les protocoles de monitoring & supervision.
-Ces protocoles collectent, rapportent et diffusent des informations techniques sur l’état du réseau, des serveurs, des équipements, des flux et des logs. Ils permettent d’alimenter des outils comme `Zabbix`, `Grafana`, `PRTG`, `LibreNMS`, `ELK`, etc.
+Un réseau bien configuré ne suffit pas. 
+
+Il faut le surveiller en temps réel, détecter les anomalies, les lenteurs, les saturations… et anticiper les pannes. 
+
+C’est là qu’interviennent les protocoles de monitoring & supervision.
+
+Ces protocoles collectent, rapportent et diffusent des informations techniques sur l’état du réseau, des serveurs, des équipements, des flux et des logs. 
+
+Ils permettent d’alimenter des outils comme `Zabbix`, `Grafana`, `PRTG`, `LibreNMS`, `ELK`, etc.
 
 ## 📊 SNMP – Simple Network Management Protocol
 
-SNMP est un protocole standardisé (RFC 1157, RFC 1905) qui permet de collecter des métriques et états depuis des équipements réseau (switchs, routeurs, serveurs, imprimantes…). Il repose sur une structure appelée MIB (Management Information Base) et fonctionne via des OID (Object Identifier).
+SNMP est un protocole standardisé (RFC 1157, RFC 1905) qui permet de collecter des métriques et états depuis des équipements réseau (`switchs`, `routeurs`, `serveurs`, `imprimantes`…). 
+
+Il repose sur une structure appelée MIB (Management Information Base) et fonctionne via des OID (Object Identifier).
+
 Il existe 3 versions :
 - `SNMPv1 / v2c` : communautaires (ex : "public", "private")
 - `SNMPv3` : sécurisé (chiffrement + authentification)
@@ -210,11 +267,20 @@ Cette commande interroge un routeur sur son temps de fonctionnement (uptime) ave
 ```bash
 docker run -d -p 161:161/udp --name snmpd nouchka/snmpd
 ```
-Conteneur SNMP prêt à l’emploi. Tu peux le sonder avec snmpwalk -v2c -c public localhost.
+Conteneur SNMP prêt à l’emploi. 
+
+Tu peux le sonder avec :
+```bash
+snmpwalk -v2c -c public localhost.
+```
+
 
 ## 🧾 Syslog – System Logging Protocol
 
-Syslog (RFC 5424) est un protocole permettant aux équipements, serveurs ou applications d’envoyer leurs journaux système à un serveur centralisé. Il utilise `UDP 514` ou `TCP 514`, et structure les logs en niveaux de priorité (emergency, error, info…).
+Syslog (RFC 5424) est un protocole permettant aux équipements, serveurs ou applications d’envoyer leurs journaux système à un serveur centralisé. 
+
+Il utilise `UDP 514` ou `TCP 514`, et structure les logs en niveaux de priorité (emergency, error, info…).
+
 Les logs sont texte brut, compatibles avec des outils comme :
 - `Rsyslog`
 - `syslog-ng`
@@ -243,7 +309,7 @@ NetFlow est un protocole propriétaire développé par Cisco, qui analyse les fl
 - `Volume de données`
 - `Durée du flux`
 ### 📦 Chaque flux est exporté vers un collecteur NetFlow, comme nfdump, ntopng, PRTG, SolarWinds, etc.
-Il existe plusieurs versions (v5, v9, IPFIX). NetFlow fonctionne généralement sur UDP 2055.
+Il existe plusieurs versions (`v5`, `v9`, `IPFIX`). NetFlow fonctionne généralement sur UDP 2055.
 ### ✅ Commande terminal (collecte passive avec nfdump) :
 ```bash
 nfcapd -l /tmp/netflow -p 2055
@@ -257,8 +323,13 @@ Tu peux envoyer des flux NetFlow depuis une VM Linux configurée avec softflowd 
 
 ## 📊 sFlow – Sampled Flow
 
-sFlow est une alternative à NetFlow, mais plus légère. Il échantillonne le trafic (ex : 1 paquet sur 1000) au lieu de tout capturer, ce qui le rend adapté aux grands réseaux, datacenters ou très gros volumes.
+sFlow est une alternative à NetFlow, mais plus légère. 
+
+Il échantillonne le trafic (ex : 1 paquet sur 1000) au lieu de tout capturer, ce qui le rend adapté aux grands réseaux, datacenters ou très gros volumes.
+
 Il collecte également des statistiques de performance, trames `Ethernet`, états `SNMP`, etc. C’est un protocole stateless basé sur `UDP 6343`.
+
+
 ### ✅ Commande terminal (capture avec sflowtool) :
 ```bash
 sflowtool -p 6343
@@ -284,13 +355,18 @@ ___
 # 🌐 Protocoles de Routage : OSPF, BGP, RIP, EIGRP, IS-IS
 
 Les protocoles de routage permettent aux routeurs et équipements d’échanger automatiquement les routes IP d’un réseau à l’autre, sans configuration manuelle statique.
+
 Il existe deux grandes familles :
 - IGP (Interior Gateway Protocol) : à l’intérieur d’un AS (Autonomous System) – ex : OSPF, RIP, EIGRP, IS-IS
 - EGP (Exterior Gateway Protocol) : entre AS – ex : BGP
+
 Ces protocoles sont essentiels pour la convergence réseau, l’équilibrage de charge, la redondance et la résilience des infrastructures d’entreprise et d’Internet.
 
 ## 🧭 OSPF – Open Shortest Path First
+
 OSPF (RFC 2328 pour v2, RFC 5340 pour v3) est un protocole IGP à état de liens, hiérarchisé en zones, utilisant l’algorithme Dijkstra (SPF) pour calculer le chemin le plus court basé sur un coût métrique (bandwidth, etc.).
+
+
 - 🔹 Supporte VLSM, CIDR, authentification, convergence rapide
 - 🔹 Fonctionne par LSA (Link-State Advertisements) échangés avec les voisins
 - 🔹 Utilise l’IP protocole 89
@@ -305,7 +381,11 @@ Utilise deux routeurs Cisco virtuels, connectés via une interface eth. Configur
 
 
 ## 🌐 BGP – Border Gateway Protocol
-BGP (RFC 4271) est le protocole de routage d’Internet. Il est utilisé pour le routage inter-AS, très scalable, basé sur des politiques et non sur une métrique automatique.
+
+BGP (RFC 4271) est le protocole de routage d’Internet. 
+
+Il est utilisé pour le routage inter-AS, très scalable, basé sur des politiques et non sur une métrique automatique.
+
 - 🔹 Utilise TCP 179 pour la session
 - 🔹 Chaque route est associée à un AS_PATH, LOCAL_PREF, MED, etc.
 - 🔹 Fonctionne en eBGP (entre AS) ou iBGP (au sein d’un AS)
@@ -329,7 +409,9 @@ router bgp 65001
 ```
 
 ## 🌀 RIP – Routing Information Protocol
-RIP (RFC 1058 pour v1, RFC 2453 pour v2) est un protocole à vecteur de distance, très simple, mais obsolète. Il choisit le chemin avec le moins de sauts (hops). Limité à 15 sauts, convergence lente.
+RIP (RFC 1058 pour v1, RFC 2453 pour v2) est un protocole à vecteur de distance, très simple, mais obsolète. 
+
+Il choisit le chemin avec le moins de sauts (hops). Limité à 15 sauts, convergence lente.
 - 🔹 Utilise UDP 520
 - 🔹 Envoie sa table toutes les 30 secondes
 - 🔹 V2 supporte subnetting et multicast
@@ -347,7 +429,10 @@ docker run -d --name quagga -e ENABLE_RIP=yes -p 520:520/udp networkop/quagga
 ```
 
 ## 🔁 EIGRP – Enhanced Interior Gateway Routing Protocol
-EIGRP est un protocole Cisco propriétaire, hybride entre vecteur de distance et état de lien. Il utilise DUAL (Diffusing Update Algorithm) pour déterminer le meilleur et backup route.
+
+EIGRP est un protocole Cisco propriétaire, hybride entre vecteur de distance et état de lien. 
+
+Il utilise DUAL (Diffusing Update Algorithm) pour déterminer le meilleur et backup route.
 - 🔹 Utilise l’IP protocole 88
 - 🔹 Calcule la métrique en fonction de bande passante, délai, charge, fiabilité
 - 🔹 Ne supporte pas de zones comme OSPF
@@ -360,7 +445,10 @@ Active EIGRP pour AS 100 sur 192.168.1.X
 ### 🛠️ Cas pratique : uniquement sur IOS ou CML (Cisco Modeling Labs)
 
 ## 🧱 IS-IS – Intermediate System to Intermediate System
-IS-IS est un protocole IGP comme OSPF, utilisé surtout par les FAI, dans les réseaux très stables. Fonctionne sur le protocole CLNS, pas sur IP directement.
+
+IS-IS est un protocole IGP comme OSPF, utilisé surtout par les FAI, dans les réseaux très stables. 
+
+Fonctionne sur le protocole CLNS, pas sur IP directement.
 - 🔹 Hiérarchisé en niveau 1 et 2 (équivalent aux zones OSPF)
 - 🔹 Très scalable et rapide en convergence
 - 🔹 Fonctionne sans IP au niveau de la découverte
@@ -386,7 +474,9 @@ ___
 
 # 🔒 Protocoles VPN & Tunnels : IPsec, L2TP, PPTP, GRE
 
-Les VPN (Virtual Private Networks) permettent de créer un tunnel sécurisé entre deux hôtes ou deux réseaux distants via Internet, comme s’ils étaient physiquement connectés. Ils assurent :
+Les VPN (Virtual Private Networks) permettent de créer un tunnel sécurisé entre deux hôtes ou deux réseaux distants via Internet, comme s’ils étaient physiquement connectés. 
+
+Ils assurent :
 - Confidentialité (chiffrement)
 - Authenticité (authentification des pairs)
 - Intégrité (non altération des données)
@@ -394,7 +484,9 @@ Les VPN (Virtual Private Networks) permettent de créer un tunnel sécurisé ent
 
 Les tunnels peuvent être chiffrés (IPsec, L2TP/IPsec, PPTP) ou simples (GRE).
 ### 🔐 IPsec – Internet Protocol Security
-IPsec (RFC 4301+) est la norme industrielle VPN. Il fonctionne en mode tunnel (réseau à réseau) ou mode transport (hôte à hôte). Il est composé de deux phases :
+IPsec (RFC 4301+) est la norme industrielle VPN. Il fonctionne en mode tunnel (réseau à réseau) ou mode transport (hôte à hôte). 
+
+Il est composé de deux phases :
 - IKE (Internet Key Exchange) → négociation cryptographique
 - ESP (Encapsulating Security Payload) ou AH (Authentication Header)
 ### 🔐 IPsec protège les paquets IP avec chiffrement (AES, 3DES) et intégrité (SHA, HMAC)
@@ -416,7 +508,9 @@ ipsec restart && ipsec up vpn
 
 ## 🧰 L2TP – Layer 2 Tunneling Protocol
 
-L2TP (RFC 2661) est un protocole de tunnel de niveau 2 (liaison), souvent couplé à IPsec pour chiffrer les données (L2TP/IPsec). Il encapsule les paquets dans UDP 1701 et offre des sessions PPP sur un tunnel IP.
+L2TP (RFC 2661) est un protocole de tunnel de niveau 2 (liaison), souvent couplé à IPsec pour chiffrer les données (L2TP/IPsec). 
+
+Il encapsule les paquets dans UDP 1701 et offre des sessions PPP sur un tunnel IP.
 ### 📦 Utilisé pour les VPN clients Windows natifs, notamment dans les entreprises.
 ### ✅ Commande (client Linux) :
 ```bash
@@ -428,7 +522,11 @@ VM Ubuntu/Debian avec xl2tpd + strongswan
 ou serveur VPN Windows (RRAS) avec L2TP/IPsec
 
 ## ⚠️ PPTP – Point-to-Point Tunneling Protocol
-PPTP est un protocole VPN ancien, basé sur GRE + TCP 1723. Il offre une encapsulation PPP mais aucune sécurité sérieuse. Le chiffrement MPPE est faible et les authentifications MS-CHAPv1/v2 sont cassées.
+PPTP est un protocole VPN ancien, basé sur GRE + TCP 1723. 
+
+Il offre une encapsulation PPP mais aucune sécurité sérieuse. 
+
+Le chiffrement MPPE est faible et les authentifications MS-CHAPv1/v2 sont cassées.
 ### ⛔ Déconseillé en production, utilisé parfois pour compatibilité ou tests simples.
 ### ✅ Commande (Linux) :
 ```bash
@@ -441,7 +539,11 @@ docker run -d --privileged --name pptp -p 1723:1723 mobtitude/docker-pptp
 ```
 
 ## 🚇 GRE – Generic Routing Encapsulation
-GRE est un protocole de tunneling non sécurisé (RFC 2784). Il permet d’encapsuler n’importe quel protocole L3 dans IP (ex : IPv6 sur IPv4). Très léger, il est souvent combiné à IPsec pour la sécurité.
+GRE est un protocole de tunneling non sécurisé (RFC 2784). 
+
+Il permet d’encapsuler n’importe quel protocole L3 dans IP (ex : IPv6 sur IPv4). 
+
+Très léger, il est souvent combiné à IPsec pour la sécurité.
 ### 📍 Utilisé pour OSPF entre sites, MPLS, VPN statiques
 ### 🔢 Utilise le protocole IP 47
 ### ✅ Commande (Linux) :
@@ -474,17 +576,24 @@ ___
 
 # 🛡️ Protocoles de Sécurité Réseau : 802.1X, RADIUS, TACACS+
 
-Dans un environnement réseau sécurisé, il ne suffit pas d’être connecté pour avoir accès : il faut contrôler, authentifier et tracer chaque tentative de connexion. C’est ce que permettent ces trois protocoles :
+Dans un environnement réseau sécurisé, il ne suffit pas d’être connecté pour avoir accès : il faut contrôler, authentifier et tracer chaque tentative de connexion. 
+
+C’est ce que permettent ces trois protocoles :
 - 802.1X : contrôle d’accès au niveau des ports
 - RADIUS : authentification centralisée pour utilisateurs et équipements
 - TACACS+ : contrôle d’accès granulaire, souvent utilisé pour les administrateurs
+
 Ces protocoles sont complémentaires, et sont utilisés ensemble dans les architectures sécurisées.
 
 ## 🧷 802.1X – Port-Based Network Access Control
-802.1X (IEEE 802.1X) est un protocole d’authentification réseau au niveau du port Ethernet ou Wi-Fi. Il repose sur un modèle à 3 rôles :
+
+802.1X (IEEE 802.1X) est un protocole d’authentification réseau au niveau du port Ethernet ou Wi-Fi. 
+
+Il repose sur un modèle à 3 rôles :
 - Supplicant : l’utilisateur ou appareil (ex. PC)
 - Authenticator : le switch ou point d’accès
 - Server : le serveur d’authentification (souvent RADIUS)
+
 ## 💡 802.1X utilise EAP (Extensible Authentication Protocol) pour transporter l’identité et les certificats, mots de passe ou jetons.
 ## 🎯 Très utilisé dans les entreprises, écoles, hôtels : tu branches un PC → pas d’accès sans authentification.
 ## ✅ Commande de vérification Cisco :
@@ -503,14 +612,19 @@ interface Gi1/0/1
 ```
 
 ## 🌐 RADIUS – Remote Authentication Dial-In User Service
-RADIUS (RFC 2865) est un protocole d’authentification, autorisation et accounting (AAA) utilisé pour valider les utilisateurs ou équipements. Il fonctionne sur :
+
+RADIUS (RFC 2865) est un protocole d’authentification, autorisation et accounting (AAA) utilisé pour valider les utilisateurs ou équipements. 
+
+Il fonctionne sur :
 - UDP 1812 (authentification)
 - UDP 1813 (accounting)
+
 Il centralise l’authentification pour :
 - VPNs
 - Wi-Fi entreprise
 - 802.1X
 - Portail captif
+
 ### 💡 Il échange des Access-Request, Access-Accept et Access-Reject.
 ### ✅ Commande test (Linux avec radtest) :
 ```bash
@@ -524,6 +638,7 @@ docker run -d --name freeradius -p 1812:1812/udp -p 1813:1813/udp freeradius/fre
 Configure /etc/raddb/clients.conf et /etc/raddb/users pour ajouter utilisateurs et clients (ex : switchs, APs).
 
 ## 🔒 TACACS+ – Terminal Access Controller Access-Control System Plus
+
 TACACS+ (protocole Cisco) est une alternative à RADIUS, plus orientée contrôle des sessions admin et logs de commandes.
 Il fonctionne sur :
 - `TCP 49`
@@ -566,7 +681,9 @@ Ces protocoles sont utilisés dans :
 - WebRTC, visioconférences, Teams/Zoom
 
 ## ☎️ SIP – Session Initiation Protocol
-SIP (RFC 3261) est le standard ouvert pour l’établissement, la modification et la terminaison des appels VoIP. Il fonctionne en mode texte (style HTTP) sur :
+SIP (RFC 3261) est le standard ouvert pour l’établissement, la modification et la terminaison des appels VoIP. 
+
+Il fonctionne en mode texte (style HTTP) sur :
 - `UDP` ou `TCP 5060`
 - `TLS 5061` (SIPS)
 ### 💬 SIP utilise des messages INVITE, ACK, BYE, REGISTER, etc., pour :
@@ -585,6 +702,7 @@ docker run -d -p 5060:5060/udp -p 10000-20000:10000-20000/udp --name sip asteris
 Lance un serveur Asterisk SIP. Configure un softphone (Zoiper, Linphone) pour t’y connecter avec un compte SIP.
 
 ## 🎧 RTP – Real-time Transport Protocol
+
 RTP (RFC 3550) est utilisé pour transporter les flux audio et vidéo (VoIP, visioconf, streaming).
 Il est déclenché par SIP ou H.323, mais ne nécessite pas de connexion préalable.
 ### 💡 Fonctionne sur des ports UDP dynamiques pair/impair, souvent 10000–20000.
@@ -774,7 +892,9 @@ Utilisés dans :
 
 ## 🌐 mDNS – Multicast DNS
 
-mDNS (RFC 6762) est une version de DNS qui fonctionne en multicast local. Il résout les noms se terminant par .local, sans avoir besoin d’un serveur DNS.
+mDNS (RFC 6762) est une version de DNS qui fonctionne en multicast local. 
+
+Il résout les noms se terminant par .local, sans avoir besoin d’un serveur DNS.
 
 ### 💡 Utilisé par Apple Bonjour, Avahi (Linux), Chromecast, imprimantes, etc.
 ### 🔢 Utilise UDP port 5353, adresse multicast 224.0.0.251
@@ -831,7 +951,7 @@ Affiche tous les voisins découverts via LLDP sur les interfaces réseau.
 ```bash
 docker run -d --privileged --network=host --name lldpd lldpd/lldpd
 ```
-Simule un switch ou un serveur avec LLDP actif. Utilise lldpctl ou Wireshark pour observer.
+Simule un switch ou un serveur avec LLDP actif. Utilise `lldpctl` ou `Wireshark` pour observer.
 
 
 ## 💾 NetBIOS – Network Basic Input Output System
@@ -882,18 +1002,20 @@ Chaque protocole a ses propres avantages, cas d’usage et limitations.
 
 ## 🔁 TCP – Transmission Control Protocol
 
-TCP (RFC 793) est un protocole orienté connexion. Il garantit que :
+TCP (RFC 793) est un protocole orienté connexion. 
+
+Il garantit que :
 - Les données sont reçues dans l’ordre
 - Il n’y a pas de perte
 - Les paquets sont retransmis en cas d’erreur
 
 ### 🔹 Utilisé pour : HTTP, HTTPS, FTP, SSH, SMTP, IMAP, etc.
 ### 🔹 Fonctionne en établissant un 3-way handshake :
-- SYN → demande de connexion
-- SYN-ACK → réponse du serveur
-- ACK → confirmation du client
+- `SYN` → demande de connexion
+- `SYN-ACK` → réponse du serveur
+- `ACK` → confirmation du client
 
-### 🔢 Port utilisé : variable selon l'application (ex : 80, 443, 22)
+### 🔢 Port utilisé : variable selon l'application (ex : `80`, `443`, `22`)
 ### ✅ Commande terminal (état des connexions) :
 ```bash
 ss -t -a
